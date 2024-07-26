@@ -213,7 +213,9 @@ namespace envire
                     uid++;
                 }
                 else
+                {
                     visualName = prefix + visual->name;
+                }
 
                 // add visual frame
                 envire::core::FrameId visualFrame = visualName + "_" + "visual";
@@ -224,7 +226,7 @@ namespace envire
 
                 // fill the config with visual information
                 configmaps::ConfigMap visualMap;
-                visualMap["name"] = visual->name;
+                visualMap["name"] = visualName;
 
                 // set geometry information
                 if (fillGeometryConfig(visual->geometry, visualMap) == false)
