@@ -300,6 +300,18 @@ namespace envire
                 for (configmaps::ConfigVector::iterator it = smurfMap["collision"].begin(); it != smurfMap["collision"].end(); ++it)
                 {
                     configmaps::ConfigMap &config = *it;
+
+                    if (!config.hasKey("name"))
+                    {
+                        LOG_ERROR_S << "Collision config item misses key \"name\".";
+                    }
+
+                    if (!config.hasKey("link"))
+                    {
+                        const auto msg = std::string{"Collision config item \""} + config["name"].toString() + "\" misses key \"link\".";
+                        LOG_ERROR_S << msg.c_str();
+                    }
+
                     if (config["name"].toString() == collision->name && config["link"].toString() == link->name)
                     {
                         collisionMap.append(config);
