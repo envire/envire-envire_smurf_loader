@@ -145,7 +145,9 @@ namespace envire
                 {
                     // the fixed joint will be added to the target frame
                     jointFrame = targetFrame;
-                } else {
+                }
+                else
+                {
                     // the dynamic joint will be added to the additional joint frame btw source und target frame
                     jointFrame = envire::core::FrameId(prefix + joint->name + "_joint");
                     graph->addFrame(jointFrame);
@@ -187,7 +189,8 @@ namespace envire
 
                 std::string className(base_types_namespace + std::string("Link"));
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, linkMap);
-                if (!item) {
+                if (!item)
+                {
                     LOG_ERROR_S << "Can not add link " << linkMap["name"].toString()
                                 << ", probably the link type " << className << " is not registered.";
                     return;
@@ -230,11 +233,14 @@ namespace envire
 
                 // set geometry information
                 if (fillGeometryConfig(visual->geometry, visualMap) == false)
+                {
                     return;
+                }
 
                 // set material information
                 urdf::MaterialSharedPtr urdfMaterial = visual->material;
-                if (urdfMaterial != nullptr) {
+                if (urdfMaterial != nullptr)
+                {
                     visualMap["material"]["name"] = prefix + "_" + urdfMaterial->name;
                     visualMap["material"]["textureFilename"] = urdfMaterial->texture_filename;
 
@@ -261,7 +267,8 @@ namespace envire
                 // create and add into the graph envire item with the object corresponding to config type
                 std::string className(geometry_namespace + visualMap["type"].toString());
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, visualMap);
-                if (!item) {
+                if (!item)
+                {
                     LOG_ERROR_S << "Can not add visual " << visualMap["name"].toString()
                                 << ", probably the visual type " << visualMap["type"].toString() << " is not registered.";
                     return;
@@ -283,7 +290,9 @@ namespace envire
                     uid++;
                 }
                 else
+                {
                     collisionName = prefix + collision->name;
+                }
 
                 // add collision frame
                 envire::core::FrameId collisionFrame = collisionName + "_" + "collision";;
@@ -324,12 +333,15 @@ namespace envire
 
                 // add geometry information
                 if (fillGeometryConfig(collision->geometry, collisionMap) == false)
+                {
                     return;
+                }
 
                 // create and add into the graph envire item with the object corresponding to config type
                 std::string className(geometry_namespace + collisionMap["type"].toString());
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, collisionMap);
-                if (!item) {
+                if (!item)
+                {
                     LOG_ERROR_S << "Can not add collision " << collisionMap["name"].toString()
                                 << ", probably the collision type " << collisionMap["type"].toString() << " is not registered.";
                     return;
@@ -367,7 +379,8 @@ namespace envire
             // create and add into the graph envire item with the object corresponding to config type
             std::string className(base_types_namespace + std::string("Inertial"));
             envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, inertiaMap);
-            if (!item) {
+            if (!item)
+            {
                 LOG_ERROR_S << "Can not add inertia " << inertiaMap["name"].toString()
                             << ", probably the inertia type " << className << " is not registered.";
                 return;
@@ -385,7 +398,8 @@ namespace envire
 
                 envire::core::FrameId jointFrame(motorMap["joint"].toString() + "_joint");
 
-                if (!graph->containsFrame(jointFrame)) {
+                if (!graph->containsFrame(jointFrame))
+                {
                     LOG_ERROR_S << "Can not add motor " << motorMap["name"].toString()
                                 << ", because there is no frame " << jointFrame << " in the graph.";
                     return;
@@ -404,7 +418,9 @@ namespace envire
                 }
                 className  = motor_namespace + className;
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, motorMap);
-                if (!item) {
+
+                if (!item)
+                {
                     LOG_ERROR_S << "Can not add motor " << motorMap["name"].toString()
                                 << ", probably the motor type " << motorMap["type"].toString() << " is not registered.";
                     return;
@@ -427,7 +443,8 @@ namespace envire
 
                 envire::core::FrameId linkFrame(sensorMap["link"].toString());
 
-                if (!graph->containsFrame(linkFrame)) {
+                if (!graph->containsFrame(linkFrame))
+                {
                     LOG_ERROR_S << "Can not add sensor " << sensorMap["name"].toString()
                                 << ", because there is no frame " << linkFrame << " in the graph.";
                     return;
@@ -441,7 +458,9 @@ namespace envire
                 }
                 className  = sensor_namespace + className;
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, sensorMap);
-                if (!item) {
+
+                if (!item)
+                {
                     LOG_ERROR_S << "Can not add sensor " << sensorMap["name"].toString()
                                 << ", probably the sensor type " << sensorMap["type"].toString() << " is not registered.";
                     continue;
@@ -536,13 +555,18 @@ namespace envire
                     jointFrame = targetFrame;
                     jointMap["type"] = std::string("Fixed");
 
-                } else {
+                }
+                else
+                {
                     // the dynamic joint will be added to the additional joint frame btw source und target frame
                     jointFrame = envire::core::FrameId(jointMap["name"].toString() + "_joint");
 
                     if (joint->type == urdf::Joint::FLOATING)
+                    {
                         jointMap["type"] = "Floating";
-                    else {
+                    }
+                    else
+                    {
                         jointMap["axis"]["x"] = joint->axis.x;
                         jointMap["axis"]["y"] = joint->axis.y;
                         jointMap["axis"]["z"] = joint->axis.z;
@@ -575,7 +599,8 @@ namespace envire
                                 break;
                             }
                             break;
-                            default: {
+                            default:
+                            {
                                 LOG_ERROR_S << "Error, got unknown joint type";
                                 return;
                             }
@@ -593,7 +618,8 @@ namespace envire
                 // create and add into the graph envire item with the object corresponding to config type
                 std::string className(joint_namespace + jointMap["type"].toString());
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, jointMap);
-                if (!item) {
+                if (!item)
+                {
                     LOG_ERROR_S << "Can not add joint " << jointMap["name"].toString()
                                 << ", probably the joint type " << jointMap["type"].toString() << " is not registered.";
                     return;
@@ -604,13 +630,15 @@ namespace envire
 
         envire::core::Transform Model::convertPoseToTransform(const urdf::Pose &pose)
         {
-            base::Position position(pose.position.x,
-                                    pose.position.y,
-                                    pose.position.z);
-            base::Orientation orientation(pose.rotation.w,
-                                        pose.rotation.x,
-                                        pose.rotation.y,
-                                        pose.rotation.z);
+            const base::Position position(
+                pose.position.x,
+                pose.position.y,
+                pose.position.z);
+            const base::Orientation orientation(
+                pose.rotation.w,
+                pose.rotation.x,
+                pose.rotation.y,
+                pose.rotation.z);
 
             return envire::core::Transform(position, orientation);
         }
@@ -620,7 +648,7 @@ namespace envire
         {
 
             // TODO: add the check if rootFolder containes "/" at the end, trim all spaces behind
-            std::string path = folderPath + "/"; // secure that path and file are combined correctly
+            const std::string path = folderPath + "/"; // secure that path and file are combined correctly
 
             // parse yaml data and write to provided map, identify path to URDF file
             map.append(configmaps::ConfigMap::fromYamlFile(path + fileName, expandURIs));
