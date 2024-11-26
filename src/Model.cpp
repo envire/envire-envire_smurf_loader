@@ -99,6 +99,8 @@ namespace envire
             configmaps::ConfigMap worldMap;
             worldMap["name"] = worldFrame;
             worldMap["prefix"] = prefix;
+            worldMap["rootFolder"] = rootFolder;
+            worldMap["smurfFile"] = fileName;
             std::string className(base_types_namespace + std::string("World"));
             envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, worldMap);
             graph->addItemToFrame(worldFrame, item);
