@@ -40,6 +40,7 @@ namespace envire {
 
             const std::string& getPrefix() const;
 
+            const std::string& getWorldFrame() const;
             const std::string& getRootFrame() const;
 
             const std::string& getSmurfFilePath() const;

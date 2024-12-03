@@ -44,6 +44,11 @@ namespace envire
             return urdfFilePathAbsolute;
         }
 
+        const std::string& Model::getWorldFrame() const
+        {
+            return "World::"+prefix;
+        }
+
         const std::string& Model::getRootFrame() const
         {
             return rootFrame;
