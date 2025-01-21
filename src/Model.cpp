@@ -106,6 +106,7 @@ namespace envire
             worldMap["prefix"] = prefix;
             worldMap["rootFolder"] = rootFolder;
             worldMap["smurfFile"] = fileName;
+            worldMap["smurfMap"] = smurfMap;
             std::string className(base_types_namespace + std::string("World"));
             envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, worldMap);
             graph->addItemToFrame(worldFrame, item);
@@ -702,6 +703,10 @@ namespace envire
             return model;
         }
 
+        configmaps::ConfigMap Model::getSmurfMap() const
+        {
+            return smurfMap;
+        }
     }
 
 }

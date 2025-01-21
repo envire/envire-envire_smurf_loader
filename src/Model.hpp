@@ -46,6 +46,7 @@ namespace envire {
             const std::string& getSmurfFilePath() const;
 
             const std::string& getUrdfFilePath() const;
+            configmaps::ConfigMap getSmurfMap() const;
 
             void loadFromSmurf(std::shared_ptr<envire::core::EnvireGraph> graph,
                                 const envire::core::FrameId &parentFrame,
