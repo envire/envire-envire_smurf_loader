@@ -424,6 +424,10 @@ namespace envire
                 {
                     className = "FeedForwardEffort";
                 }
+                if(className == "position")
+                {
+                    className = "PID";
+                }
                 className  = motor_namespace + className;
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, motorMap);
 
