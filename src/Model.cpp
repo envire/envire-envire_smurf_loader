@@ -265,9 +265,14 @@ namespace envire
                         configmaps::ConfigMap &materialMap = *it;
                         if(materialMap["name"].toString() == urdfMaterial->name)
                         {
-                            visualMap["material"]["ambientColor"] = materialMap["ambientColor"][0];
-                            visualMap["material"]["specularColor"] = materialMap["specularColor"][0];
-                            visualMap["material"]["shininess"] = materialMap["shininess"];
+                            visualMap["material"].updateMap(materialMap);
+                            if(!visualMap["material"].hasKey("ambientColor"))
+                            {
+                                visualMap["material"]["ambientColor"] = visualMap["material"]["diffuseColor"];
+                            }
+                            /*visualMap["material"]["ambientColor"] = materialMap["ambientColor"][0];
+                              visualMap["material"]["specularColor"] = materialMap["specularColor"][0];
+                              visualMap["material"]["shininess"] = materialMap["shininess"];*/
                         }
                     }
                 }
