@@ -49,15 +49,18 @@ namespace envire {
             configmaps::ConfigMap getSmurfMap() const;
 
             void loadFromSmurf(std::shared_ptr<envire::core::EnvireGraph> graph,
-                                const envire::core::FrameId &parentFrame,
-                                const std::string &filePath,
-                                const base::Position &position = base::Position(0, 0, 0),
-                                const base::Orientation &orientation = base::Orientation(1, 0, 0, 0),
-                                const std::string &prefix = "");
+                               const envire::core::FrameId &parentFrame,
+                               const std::string &filePath,
+                               const base::Position &position = base::Position(0, 0, 0),
+                               const base::Orientation &orientation = base::Orientation(1, 0, 0, 0),
+                               const std::string &prefix = "",
+                               const std::string &worldName = ""
+                );
 
         private:
             std::string name;
             std::string prefix;
+            std::string worldName, worldFrame;
             std::string smurfFilePathAbsolute;
             std::string urdfFilePathAbsolute;
             urdf::ModelInterfaceSharedPtr urdfModel;
@@ -74,7 +77,9 @@ namespace envire {
 
             void loadFromSmurf(const std::string &filePath, const std::string &prefix = "");
 
-            void loadStructure(std::shared_ptr<envire::core::EnvireGraph> graph, const envire::core::FrameId &parentFrame);
+            void loadStructure(std::shared_ptr<envire::core::EnvireGraph> graph,
+                               const envire::core::FrameId &parentFrame,
+                               const envire::core::Transform& initPose);
             void loadLinks(std::shared_ptr<envire::core::EnvireGraph> graph);
             void loadVisuals(std::shared_ptr<envire::core::EnvireGraph> graph, urdf::LinkSharedPtr link, envire::core::FrameId linkFrame);
             void loadCollisions(std::shared_ptr<envire::core::EnvireGraph> graph, urdf::LinkSharedPtr link, envire::core::FrameId linkFrame);

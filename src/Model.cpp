@@ -46,7 +46,7 @@ namespace envire
 
         const std::string& Model::getWorldFrame() const
         {
-            return "World::"+prefix;
+            return worldFrame;
         }
 
         const std::string& Model::getRootFrame() const
@@ -55,12 +55,21 @@ namespace envire
         }
 
         void Model::loadFromSmurf(std::shared_ptr<envire::core::EnvireGraph> graph, const envire::core::FrameId &parentFrame,
-                                const std::string &filePath,
-                                const base::Position &position,
-                                const base::Orientation &orientation,
-                                const std::string &prefix)
+                                  const std::string &filePath,
+                                  const base::Position &position,
+                                  const base::Orientation &orientation,
+                                  const std::string &prefix,
+                                  const std::string &worldName
+            )
         {
             this->prefix = prefix;
+            this->worldName = worldName;
+
+            if(this->worldName.empty())
+            {
+                this->worldName = this->prefix;
+            }
+
             // Load model from file
             boost::filesystem::path filePathAbsolute(boost::filesystem::absolute(filePath));
             std::string rootFolder = filePathAbsolute.parent_path().generic_string();
@@ -95,23 +104,30 @@ namespace envire
 
             // add new frame for the world
             // TODO: do we need World:: ?
-            envire::core::FrameId worldFrame = "World::" + prefix;
-            graph->addFrame(worldFrame);
+            worldFrame = "World::" + this->worldName;
+
+            // init pose should not be applied to worldFrame but base link instead
             envire::core::Transform initPose(position, orientation);
-            graph->addTransform(parentFrame, worldFrame, initPose);
 
-            // add world into the world frame
-            configmaps::ConfigMap worldMap;
-            worldMap["name"] = worldFrame;
-            worldMap["prefix"] = prefix;
-            worldMap["rootFolder"] = rootFolder;
-            worldMap["smurfFile"] = fileName;
-            worldMap["smurfMap"] = smurfMap;
-            std::string className(base_types_namespace + std::string("World"));
-            envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, worldMap);
-            graph->addItemToFrame(worldFrame, item);
+            if(graph->containsFrame(worldFrame) == false) {
+                graph->addFrame(worldFrame);
+                envire::core::Transform worldPose;
+                worldPose.setIdentity();
+                graph->addTransform(parentFrame, worldFrame, worldPose);
 
-            loadStructure(graph, worldFrame);
+                // add world into the world frame
+                configmaps::ConfigMap worldMap;
+                worldMap["name"] = worldFrame;
+                worldMap["prefix"] = prefix;
+                worldMap["rootFolder"] = rootFolder;
+                worldMap["smurfFile"] = fileName;
+                worldMap["smurfMap"] = smurfMap;
+                std::string className(base_types_namespace + std::string("World"));
+                envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, worldMap);
+                graph->addItemToFrame(worldFrame, item);
+            }
+
+            loadStructure(graph, worldFrame, initPose);
 
             loadLinks(graph);
             loadJoints(graph);
@@ -119,7 +135,7 @@ namespace envire
             loadSensors(graph);
         }
 
-        void Model::loadStructure(std::shared_ptr<envire::core::EnvireGraph> graph, const envire::core::FrameId &parentFrame) {
+        void Model::loadStructure(std::shared_ptr<envire::core::EnvireGraph> graph, const envire::core::FrameId &parentFrame, const envire::core::Transform& initPose) {
 
 
             // parse all links and create a new frame for each link in the graph
@@ -132,8 +148,8 @@ namespace envire
                 // find root link, attach the root frame to parent frame with initPose transformation
                 if (linkPair.first == urdfModel->getRoot()->name)
                 {
-                    envire::core::Transform initPose;
-                    initPose.setIdentity();
+                    //envire::core::Transform initPose;
+                    //initPose.setIdentity();
                     rootFrame = linkFrame;
                     graph->addTransform(parentFrame, linkFrame, initPose);
                 }
