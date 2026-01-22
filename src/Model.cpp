@@ -211,6 +211,24 @@ namespace envire
                 configmaps::ConfigMap linkMap;
                 linkMap["name"] = linkFrame;
 
+                // add additional link information from smurf
+                // note: the keys of linkMap, that were set before, may be overwriten here
+                for (configmaps::ConfigVector::iterator it = smurfMap["link"].begin(); it != smurfMap["link"].end(); ++it)
+                {
+                    configmaps::ConfigMap &config = *it;
+
+                    if (!config.hasKey("link"))
+                    {
+                        const auto msg = std::string{"Link config item \""} + "\" misses key \"link\".";
+                        LOG_ERROR_S << msg.c_str();
+                    }
+
+                    if (config["link"].toString() == linkPair.first)
+                    {
+                        linkMap.append(config);
+                    }
+                }
+
                 std::string className(base_types_namespace + std::string("Link"));
                 envire::core::ItemBase::Ptr item = envire::types::TypeCreatorFactory::createItem(className, linkMap);
                 if (!item)
