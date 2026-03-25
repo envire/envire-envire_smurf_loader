@@ -78,6 +78,11 @@ namespace envire
             smurfFilePathAbsolute = filePathAbsolute.string();
 
             urdfModel = parseFile(smurfMap, rootFolder, fileName, true);
+            if(!urdfModel)
+            {
+                LOG_ERROR_S << "Failed loading urdf model!";
+                return;
+            }
 
             // Get URDF file path
             configmaps::ConfigVector::iterator it;
