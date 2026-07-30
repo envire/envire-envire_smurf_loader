@@ -454,7 +454,7 @@ namespace envire
                 {
                     LOG_ERROR_S << "Can not add motor " << motorMap["name"].toString()
                                 << ", because there is no frame " << jointFrame << " in the graph.";
-                    return;
+                    continue;
                 }
 
                 // create and add into the graph envire item with the object corresponding to config type
@@ -479,7 +479,7 @@ namespace envire
                 {
                     LOG_ERROR_S << "Can not add motor " << motorMap["name"].toString()
                                 << ", probably the motor type " << motorMap["type"].toString() << " is not registered.";
-                    return;
+                    continue;
                 }
                 graph->addItemToFrame(jointFrame, item);
             }
